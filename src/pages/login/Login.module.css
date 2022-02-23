@@ -1,6 +1,7 @@
 .container {
-  width: 100%;
+  width: 90%;
   max-width: 550px;
+  min-width: 350px;
   position: fixed;
   top: 50%;
   left: 50%;

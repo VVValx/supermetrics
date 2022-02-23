@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Input from "../../components/input/Input";
 import ErrorNotification from "../../components/errorNotification/ErrorNotification";
+import AuthContext from "../../contexts/AuthContext";
+import TokenContext from "../../contexts/TokenContext";
+import urls from "../../config/urls.json";
+import apiCall from "../../services/apiCall";
 import login from "./Login.module.css";
 
 function Login() {
@@ -15,6 +19,11 @@ function Login() {
   });
 
   const [loginError, setLoginError] = useState("");
+  const { auth, setAuth } = useContext(AuthContext);
+  const { tokenObj, setTokenObj } = useContext(TokenContext);
+
+  console.log("token", tokenObj);
+  console.log("auth", auth);
 
   // for validating input while user types
   const handleInputError = ({ name, value }) => {
@@ -66,8 +75,17 @@ function Login() {
     callBackend();
   };
 
-  const callBackend = () => {
-    console.log("loggin in..");
+  const callBackend = async () => {
+    try {
+      const newData = { client_id: process.env.REACT_APP_CLIENT_ID, ...data };
+      const result = await apiCall({ url: urls.register, body: newData });
+      const { sl_token } = result.data;
+      console.log(result.data);
+      setAuth(true);
+      setTokenObj({ token: sl_token, lastUpdated: new Date() });
+    } catch (error) {
+      setLoginError("Database error");
+    }
   };
 
   return (

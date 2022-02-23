@@ -1,0 +1,4 @@
+{
+    "register": "https://api.supermetrics.com/assignment/register",
+    "posts": "https://api.supermetrics.com/assignment/posts"
+}
