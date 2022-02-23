@@ -1,0 +1,45 @@
+.container {
+  width: 100%;
+  max-width: 550px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  color: #707b7c;
+  border-radius: 10px;
+}
+
+.mainHeader {
+  text-align: center;
+  font-size: 35px;
+  text-transform: uppercase;
+}
+
+.input_container {
+  width: 60%;
+  min-width: 300px;
+  margin: 35px auto;
+}
+
+.input_label {
+  font-size: 14px;
+}
+
+.input_container input {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1.5px solid #d0d3d4;
+  border-radius: 5px;
+}
+
+.btn {
+  text-align: right;
+}
+
+.btn button {
+  width: 100px;
+  border: none;
+  color: #707b7c;
+  padding: 13px 0;
+}
