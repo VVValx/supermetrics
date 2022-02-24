@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import NotFound from "./pages/notFound/NotFound";
 import Login from "./pages/login/Login";
+import Posts from "./pages/posts/Posts";
+import Post from "./pages/posts/Post";
+import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import AuthContext from "./contexts/AuthContext";
 import TokenContext from "./contexts/TokenContext";
 import useSaveToStorage from "./customHooks/useSaveToStorage";
@@ -24,7 +29,26 @@ function App() {
   return (
     <AuthContext.Provider value={authState}>
       <TokenContext.Provider value={tokenState}>
-        <Login />
+        <Routes>
+          <Route path="*" element={<NotFound />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Posts />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/:id"
+            element={
+              <PrivateRoute>
+                <Post />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
       </TokenContext.Provider>
     </AuthContext.Provider>
   );

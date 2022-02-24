@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
 import ErrorNotification from "../../components/errorNotification/ErrorNotification";
 import AuthContext from "../../contexts/AuthContext";
@@ -24,6 +25,8 @@ function Login() {
 
   console.log("token", tokenObj);
   console.log("auth", auth);
+
+  const navigate = useNavigate();
 
   // for validating input while user types
   const handleInputError = ({ name, value }) => {
@@ -80,9 +83,9 @@ function Login() {
       const newData = { client_id: process.env.REACT_APP_CLIENT_ID, ...data };
       const result = await apiCall({ url: urls.register, body: newData });
       const { sl_token } = result.data;
-      console.log(result.data);
       setAuth(true);
       setTokenObj({ token: sl_token, lastUpdated: new Date() });
+      navigate("/", { replace: true });
     } catch (error) {
       setLoginError("Database error");
     }

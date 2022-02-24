@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 function useSaveToStorage(key, state) {
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
+    sessionStorage.setItem(key, JSON.stringify(state));
   }, [state]);
 }
 
