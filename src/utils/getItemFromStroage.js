@@ -1,1 +1,1 @@
-export default (key) => JSON.parse(sessionStorage.getItem(key));
+export default (key) => JSON.parse(localStorage.getItem(key));

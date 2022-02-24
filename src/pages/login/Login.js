@@ -1,11 +1,16 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import useCheckAuth from "../../customHooks/useCheckAuth";
 import Input from "../../components/input/Input";
 import ErrorNotification from "../../components/errorNotification/ErrorNotification";
 import AuthContext from "../../contexts/AuthContext";
 import TokenContext from "../../contexts/TokenContext";
+import Header from "../../components/header/Header";
+import FormButton from "../../formButton/FormButton";
+import Container from "../../components/container/Container";
 import urls from "../../config/urls.json";
 import apiCall from "../../services/apiCall";
+import isEmailValid from "../../utils/isEmailValid";
 import login from "./Login.module.css";
 
 function Login() {
@@ -23,20 +28,21 @@ function Login() {
   const { auth, setAuth } = useContext(AuthContext);
   const { tokenObj, setTokenObj } = useContext(TokenContext);
 
-  console.log("token", tokenObj);
-  console.log("auth", auth);
-
   const navigate = useNavigate();
+
+  useCheckAuth(auth);
+
+  console.log("auth", auth);
+  console.log("topken", tokenObj);
 
   // for validating input while user types
   const handleInputError = ({ name, value }) => {
     if (name === "name") if (!value) return `${name} is empty`;
 
     if (name === "email") {
-      const validation = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-      const re = new RegExp(validation).test(value);
+      const validEmail = isEmailValid(value);
       if (!value) return `${name} is empty`;
-      if (!re) return `${value} is not a valid email`;
+      if (!validEmail) return `${value} is not a valid email`;
     }
 
     return null;
@@ -61,11 +67,10 @@ function Login() {
   //Validates input when user clicks go button
   const handleRegisterError = () => {
     const { name, email } = data;
-    const validation = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    const re = new RegExp(validation).test(email);
+    const validEmail = isEmailValid(email);
 
     if (!name || !email) return "Incorrect name or email";
-    if (!re) return `Incorrect name or email`;
+    if (!validEmail) return `Incorrect name or email`;
 
     return null;
   };
@@ -95,8 +100,8 @@ function Login() {
     <>
       <ErrorNotification loginError={loginError} />
 
-      <div className={login.container}>
-        <header className={`${login.mainHeader} margin-sm`}>Login</header>
+      <Container className={login.container}>
+        <Header className={`${login.mainHeader} margin-sm`}>Login</Header>
 
         <Input
           name="name"
@@ -114,10 +119,13 @@ function Login() {
           label="Email"
         />
 
-        <div className={`${login.input_container} ${login.btn}`}>
-          <button onClick={handleLogin}>Go</button>
-        </div>
-      </div>
+        <FormButton
+          className={`${login.input_container} ${login.btn}`}
+          onClick={handleLogin}
+        >
+          Go
+        </FormButton>
+      </Container>
     </>
   );
 }
