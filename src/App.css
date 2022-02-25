@@ -22,3 +22,8 @@ button {
 .error {
   color: #dc7633;
 }
+
+.active {
+  background: #a6acaf;
+  color: #ecf0f1;
+}
