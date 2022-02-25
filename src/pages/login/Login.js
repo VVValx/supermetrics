@@ -5,12 +5,14 @@ import Input from "../../components/input/Input";
 import ErrorNotification from "../../components/errorNotification/ErrorNotification";
 import AuthContext from "../../contexts/AuthContext";
 import TokenContext from "../../contexts/TokenContext";
+import UserContext from "../../contexts/UserContext";
 import Header from "../../components/header/Header";
 import FormButton from "../../formButton/FormButton";
 import Container from "../../components/container/Container";
 import urls from "../../config/urls.json";
 import apiCall from "../../services/apiCall";
 import isEmailValid from "../../utils/isEmailValid";
+import getNewToken from "../../utils/getNewToken";
 import login from "./Login.module.css";
 
 function Login() {
@@ -27,6 +29,7 @@ function Login() {
   const [loginError, setLoginError] = useState("");
   const { auth, setAuth } = useContext(AuthContext);
   const { tokenObj, setTokenObj } = useContext(TokenContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -34,6 +37,7 @@ function Login() {
 
   console.log("auth", auth);
   console.log("topken", tokenObj);
+  console.log("currentUser", currentUser);
 
   // for validating input while user types
   const handleInputError = ({ name, value }) => {
@@ -85,11 +89,10 @@ function Login() {
 
   const callBackend = async () => {
     try {
-      const newData = { client_id: process.env.REACT_APP_CLIENT_ID, ...data };
-      const result = await apiCall({ url: urls.register, body: newData });
-      const { sl_token } = result.data;
+      const token = await getNewToken(data);
       setAuth(true);
-      setTokenObj({ token: sl_token, lastUpdated: new Date() });
+      setTokenObj({ token, lastUpdated: new Date() });
+      setCurrentUser(data);
       navigate("/", { replace: true });
     } catch (error) {
       setLoginError("Database error");
