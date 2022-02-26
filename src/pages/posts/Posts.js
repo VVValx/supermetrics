@@ -5,6 +5,8 @@ import getToken from "../../utils/getToken";
 import getPosts from "../../utils/getPosts";
 import Container from "../../components/container/Container";
 import formatDate from "../../utils/formatDate";
+import LoadingScreen from "../../components/loadingScreen/LoadingScreen";
+import sortBy from "../../utils/sortBy";
 import p from "./Posts.module.css";
 
 function Posts() {
@@ -13,6 +15,7 @@ function Posts() {
   const [searchName, setSearchName] = useState("");
   const [searchPost, setSearchPost] = useState("");
   const [loading, setLoading] = useState(true);
+  const [orderBy, setOrderBy] = useState("desc");
 
   const { currentUser } = useContext(UserContext);
   const tokenContext = useContext(TokenContext);
@@ -26,6 +29,7 @@ function Posts() {
 
     try {
       const token = await getToken(tokenContext, currentUser);
+
       while (page <= 10) {
         const posts = await getPosts(page, token);
 
@@ -86,19 +90,18 @@ function Posts() {
       );
     });
 
-  if (loading) return <p>Loading</p>;
+  const changeSortType = () =>
+    orderBy === "desc" ? setOrderBy("asc") : setOrderBy("desc");
+
+  if (loading) return <LoadingScreen />;
 
   const posts = users.filter((user) => user.id === userToDisplayPost)[0].posts;
-  const sortedPosts = posts.sort(
-    (a, b) => new Date(b.created_time) - new Date(a.created_time)
-  );
+  const sortedPosts = sortBy(posts, "created_time", orderBy);
 
   const postFilter =
     searchPost.length > 2 ? filterPosts(sortedPosts) : sortedPosts;
 
   const userFilter = searchName.length > 0 ? filterUsers(users) : users;
-
-  console.log("sorted", sortedPosts);
 
   return (
     <Container className={p.container}>
@@ -129,7 +132,12 @@ function Posts() {
       <div className={p.posts}>
         <div className={p.postsWrapper}>
           <div className={p.top}>
-            <div className={p.left}>.</div>
+            <div className={p.left}>
+              <div
+                onClick={changeSortType}
+                className={orderBy === "asc" ? p.rotate : ""}
+              ></div>
+            </div>
             <div className={p.right}>
               <input
                 type="text"
