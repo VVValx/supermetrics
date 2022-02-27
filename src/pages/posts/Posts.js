@@ -54,8 +54,6 @@ function Posts() {
     getUsers();
   }, [currentUser, searchUser, tokenContext]);
 
-  console.log("redner");
-
   const changeSortType = () =>
     orderBy === "desc" ? setOrderBy("asc") : setOrderBy("desc");
 
