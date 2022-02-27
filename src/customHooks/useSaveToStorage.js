@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 function useSaveToStorage(key, state) {
   useEffect(() => localStorage.setItem(key, JSON.stringify(state)), [state]);

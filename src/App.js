@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import NotFound from "./pages/notFound/NotFound";
 import Login from "./pages/login/Login";
 import Posts from "./pages/posts/Posts";
-import Post from "./pages/posts/Post";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import AuthContext from "./contexts/AuthContext";
 import UserContext from "./contexts/UserContext";

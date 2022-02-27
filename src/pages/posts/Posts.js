@@ -38,7 +38,9 @@ function Posts() {
         setUsers(users);
 
         if (searchUser) {
-          const user = users.find((user) => user.id === searchUser);
+          const user = users.find(
+            (user) => user.id === searchUser.toLocaleLowerCase()
+          );
           user
             ? setUserToDisplayPost(user.id)
             : setUserToDisplayPost(users[0].id);
@@ -49,9 +51,10 @@ function Posts() {
         setLoading(false);
       }
     };
-
     getUsers();
-  }, []);
+  }, [currentUser, searchUser, tokenContext]);
+
+  console.log("redner");
 
   const changeSortType = () =>
     orderBy === "desc" ? setOrderBy("asc") : setOrderBy("desc");

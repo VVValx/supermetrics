@@ -1,1 +1,3 @@
-export default (key) => JSON.parse(localStorage.getItem(key));
+const getItemFromStroage = (key) => JSON.parse(localStorage.getItem(key));
+
+export default getItemFromStroage;
