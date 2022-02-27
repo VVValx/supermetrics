@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import TokenContext from "../../contexts/TokenContext";
 import UserContext from "../../contexts/UserContext";
@@ -23,23 +24,34 @@ function Posts() {
   const { setAuth } = useContext(AuthContext);
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const tokenContext = useContext(TokenContext);
+
+  const [searchParams] = useSearchParams();
+  const searchUser = searchParams.get("user");
+
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const token = await getToken(tokenContext, currentUser);
+        const users = await getAllUsers(token);
+
+        users.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+        setUsers(users);
+
+        if (searchUser) {
+          const user = users.find((user) => user.id === searchUser);
+          user
+            ? setUserToDisplayPost(user.id)
+            : setUserToDisplayPost(users[0].id);
+        } else setUserToDisplayPost(users[0].id);
+
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
     getUsers();
   }, []);
-
-  const getUsers = async () => {
-    try {
-      const token = await getToken(tokenContext, currentUser);
-      const users = await getAllUsers(token);
-
-      users.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-      setUsers(users);
-      setUserToDisplayPost(users[0].id);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
 
   const changeSortType = () =>
     orderBy === "desc" ? setOrderBy("asc") : setOrderBy("desc");
@@ -62,7 +74,6 @@ function Posts() {
 
   const userFilter =
     searchName.length > 0 ? searchItems(users, "name", searchName) : users;
-  console.log("surs", users);
   return (
     <Div className={p.container}>
       <Users

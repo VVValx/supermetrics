@@ -47,14 +47,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/:id"
-              element={
-                <PrivateRoute>
-                  <Post />
-                </PrivateRoute>
-              }
-            />
           </Routes>
         </UserContext.Provider>
       </TokenContext.Provider>
