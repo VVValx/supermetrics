@@ -11,7 +11,7 @@ function UsersList({ users, userToDisplayPost, setUserToDisplayPost }) {
       onClick={() => setUserToDisplayPost(user.id)}
     >
       <div className={p.user}>{user.name}</div>
-      <div className={p.count}>{user.totalPost}</div>
+      <div className={p.count}>{user.posts.length}</div>
     </div>
   ));
 }

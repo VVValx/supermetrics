@@ -2,10 +2,18 @@ import React from "react";
 import PostList from "./PostsList";
 import Input from "../input/Input";
 import Div from "../div/Div";
+import Button from "../button/Button";
 import ArrowIcon from "../arrow/ArrowIcon";
 import p from "./PostsItem.module.css";
 
-function PostsItem({ posts, value, setSearchPost, onClick, orderBy }) {
+function PostsItem({
+  posts,
+  value,
+  setSearchPost,
+  onClick,
+  orderBy,
+  handleLogout,
+}) {
   return (
     <Div className={p.posts}>
       <Div className={p.postsWrapper}>
@@ -21,6 +29,10 @@ function PostsItem({ posts, value, setSearchPost, onClick, orderBy }) {
             placeholder="Search posts"
             className={p.right}
           />
+
+          <Button className={p.logout} onClick={handleLogout}>
+            Logout
+          </Button>
         </Div>
 
         <PostList posts={posts} />

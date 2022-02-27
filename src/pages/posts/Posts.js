@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../contexts/AuthContext";
 import TokenContext from "../../contexts/TokenContext";
 import UserContext from "../../contexts/UserContext";
 import getToken from "../../utils/getToken";
@@ -7,8 +8,9 @@ import Div from "../../components/div/Div";
 import LoadingScreen from "../../components/loadingScreen/LoadingScreen";
 import sortBy from "../../utils/sortBy";
 import Users from "../../components/users/Users";
-import p from "./Posts.module.css";
+import searchItems from "../../utils/searchItems";
 import PostsItem from "../../components/posts/PostsItem";
+import p from "./Posts.module.css";
 
 function Posts() {
   const [users, setUsers] = useState([]);
@@ -18,7 +20,8 @@ function Posts() {
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState("desc");
 
-  const { currentUser } = useContext(UserContext);
+  const { setAuth } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const tokenContext = useContext(TokenContext);
   useEffect(() => {
     getUsers();
@@ -38,32 +41,14 @@ function Posts() {
     }
   };
 
-  const filterUsers = (users) =>
-    users.filter((user) => {
-      const userToLower = user.name.toLowerCase();
-      const s = searchName.toLocaleLowerCase();
-
-      return (
-        userToLower.startsWith(s) ||
-        userToLower.endsWith(s) ||
-        userToLower.includes(s)
-      );
-    });
-
-  const filterPosts = (posts) =>
-    posts.filter((post) => {
-      const postToLower = post.message.toLowerCase();
-      const s = searchPost.toLocaleLowerCase();
-
-      return (
-        postToLower.startsWith(s) ||
-        postToLower.endsWith(s) ||
-        postToLower.includes(s)
-      );
-    });
-
   const changeSortType = () =>
     orderBy === "desc" ? setOrderBy("asc") : setOrderBy("desc");
+
+  const handleLogout = () => {
+    setAuth(false);
+    setCurrentUser(null);
+    tokenContext.setTokenObj({ token: null, lastUpdate: null });
+  };
 
   if (loading) return <LoadingScreen />;
 
@@ -71,10 +56,13 @@ function Posts() {
   const sortedPosts = sortBy(posts, "created_time", orderBy);
 
   const postFilter =
-    searchPost.length > 2 ? filterPosts(sortedPosts) : sortedPosts;
+    searchPost.length > 2
+      ? searchItems(sortedPosts, "message", searchPost)
+      : sortedPosts;
 
-  const userFilter = searchName.length > 0 ? filterUsers(users) : users;
-
+  const userFilter =
+    searchName.length > 0 ? searchItems(users, "name", searchName) : users;
+  console.log("surs", users);
   return (
     <Div className={p.container}>
       <Users
@@ -91,6 +79,7 @@ function Posts() {
         setSearchPost={setSearchPost}
         onClick={changeSortType}
         orderBy={orderBy}
+        handleLogout={handleLogout}
       />
     </Div>
   );

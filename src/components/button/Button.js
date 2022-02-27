@@ -1,6 +1,6 @@
 import React from "react";
 
-function FormButton({ children, className, ...props }) {
+function Button({ children, className, ...props }) {
   return (
     <div className={className}>
       <button {...props}>{children}</button>
@@ -8,4 +8,4 @@ function FormButton({ children, className, ...props }) {
   );
 }
 
-export default FormButton;
+export default Button;

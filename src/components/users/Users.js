@@ -17,6 +17,7 @@ function Users({
         value={value}
         onChange={({ target }) => setSearchName(target.value)}
         placeholder="Search Users"
+        className={p.searchContainer}
       />
 
       <UsersList

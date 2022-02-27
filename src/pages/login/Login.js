@@ -7,7 +7,7 @@ import AuthContext from "../../contexts/AuthContext";
 import TokenContext from "../../contexts/TokenContext";
 import UserContext from "../../contexts/UserContext";
 import Header from "../../components/header/Header";
-import FormButton from "../../formButton/FormButton";
+import Button from "../../components/button/Button";
 import Div from "../../components/div/Div";
 import isEmailValid from "../../utils/isEmailValid";
 import getNewToken from "../../utils/getNewToken";
@@ -116,12 +116,12 @@ function Login() {
           label="Email"
         />
 
-        <FormButton
+        <Button
           className={`${login.input_container} ${login.btn}`}
           onClick={handleLogin}
         >
           Go
-        </FormButton>
+        </Button>
       </Div>
     </>
   );

@@ -10,14 +10,11 @@ const getAllUsers = async (token) => {
       posts.forEach((post) => {
         const index = users.findIndex((user) => post.from_id === user.id);
         const postObj = {
+          postId: post.id,
           created_time: post.created_time,
           message: post.message,
         };
-        if (index !== -1) {
-          users[index].totalPost += 1;
-          users[index].posts.push(postObj);
-          return;
-        }
+        if (index !== -1) return users[index].posts.push(postObj);
 
         const newData = {
           id: post.from_id,
