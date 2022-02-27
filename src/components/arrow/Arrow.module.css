@@ -1,0 +1,8 @@
+.arrowIcon {
+  border-bottom: 20px solid #a6acaf;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  transition: 0.5s ease all;
+
+  cursor: pointer;
+}

@@ -8,9 +8,7 @@ import TokenContext from "../../contexts/TokenContext";
 import UserContext from "../../contexts/UserContext";
 import Header from "../../components/header/Header";
 import FormButton from "../../formButton/FormButton";
-import Container from "../../components/container/Container";
-import urls from "../../config/urls.json";
-import apiCall from "../../services/apiCall";
+import Div from "../../components/div/Div";
 import isEmailValid from "../../utils/isEmailValid";
 import getNewToken from "../../utils/getNewToken";
 import login from "./Login.module.css";
@@ -28,16 +26,12 @@ function Login() {
 
   const [loginError, setLoginError] = useState("");
   const { auth, setAuth } = useContext(AuthContext);
-  const { tokenObj, setTokenObj } = useContext(TokenContext);
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { setTokenObj } = useContext(TokenContext);
+  const { setCurrentUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   useCheckAuth(auth);
-
-  console.log("auth", auth);
-  console.log("topken", tokenObj);
-  console.log("currentUser", currentUser);
 
   // for validating input while user types
   const handleInputError = ({ name, value }) => {
@@ -103,7 +97,7 @@ function Login() {
     <>
       <ErrorNotification loginError={loginError} />
 
-      <Container className={login.container}>
+      <Div className={login.container}>
         <Header className={`${login.mainHeader} margin-sm`}>Login</Header>
 
         <Input
@@ -128,7 +122,7 @@ function Login() {
         >
           Go
         </FormButton>
-      </Container>
+      </Div>
     </>
   );
 }

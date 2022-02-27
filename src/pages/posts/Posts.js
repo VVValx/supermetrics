@@ -2,12 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import TokenContext from "../../contexts/TokenContext";
 import UserContext from "../../contexts/UserContext";
 import getToken from "../../utils/getToken";
-import getPosts from "../../utils/getPosts";
-import Container from "../../components/container/Container";
-import formatDate from "../../utils/formatDate";
+import getAllUsers from "../../utils/getAllUsers";
+import Div from "../../components/div/Div";
 import LoadingScreen from "../../components/loadingScreen/LoadingScreen";
 import sortBy from "../../utils/sortBy";
+import Users from "../../components/users/Users";
 import p from "./Posts.module.css";
+import PostsItem from "../../components/posts/PostsItem";
 
 function Posts() {
   const [users, setUsers] = useState([]);
@@ -24,38 +25,9 @@ function Posts() {
   }, []);
 
   const getUsers = async () => {
-    const users = [];
-    let page = 1;
-
     try {
       const token = await getToken(tokenContext, currentUser);
-
-      while (page <= 10) {
-        const posts = await getPosts(page, token);
-
-        posts.forEach((post) => {
-          const index = users.findIndex((user) => post.from_id === user.id);
-          const postObj = {
-            created_time: post.created_time,
-            message: post.message,
-          };
-          if (index !== -1) {
-            users[index].totalPost += 1;
-            users[index].posts.push(postObj);
-            return;
-          }
-
-          const newData = {
-            id: post.from_id,
-            name: post.from_name,
-            posts: [postObj],
-            totalPost: 1,
-          };
-          users.push(newData);
-        });
-
-        page += 1;
-      }
+      const users = await getAllUsers(token);
 
       users.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
       setUsers(users);
@@ -104,59 +76,23 @@ function Posts() {
   const userFilter = searchName.length > 0 ? filterUsers(users) : users;
 
   return (
-    <Container className={p.container}>
-      <div className={p.users}>
-        <div className={p.searchContainer}>
-          <input
-            type="text"
-            value={searchName}
-            onChange={({ target }) => setSearchName(target.value)}
-            placeholder="Search users"
-          />
-        </div>
+    <Div className={p.container}>
+      <Users
+        users={userFilter}
+        userToDisplayPost={userToDisplayPost}
+        setUserToDisplayPost={setUserToDisplayPost}
+        value={searchName}
+        setSearchName={setSearchName}
+      />
 
-        {userFilter.map((user) => (
-          <div
-            className={`${p.userWrapper} ${
-              user.id === userToDisplayPost && "active"
-            }`}
-            key={user.id}
-            onClick={() => setUserToDisplayPost(user.id)}
-          >
-            <div className={p.user}>{user.name}</div>
-            <div className={p.count}>{user.totalPost}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className={p.posts}>
-        <div className={p.postsWrapper}>
-          <div className={p.top}>
-            <div className={p.left}>
-              <div
-                onClick={changeSortType}
-                className={orderBy === "asc" ? p.rotate : ""}
-              ></div>
-            </div>
-            <div className={p.right}>
-              <input
-                type="text"
-                value={searchPost}
-                onChange={({ target }) => setSearchPost(target.value)}
-                placeholder="Search posts"
-              />
-            </div>
-          </div>
-
-          {postFilter.map((post, index) => (
-            <div className={p.postWrapper} key={index}>
-              <div className={p.date}>{formatDate(post.created_time)}</div>
-              <div className={p.message}>{post.message}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Container>
+      <PostsItem
+        posts={postFilter}
+        value={searchPost}
+        setSearchPost={setSearchPost}
+        onClick={changeSortType}
+        orderBy={orderBy}
+      />
+    </Div>
   );
 }
 

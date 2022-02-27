@@ -1,0 +1,52 @@
+.posts {
+  margin-left: 370px;
+}
+
+.postsWrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.right {
+  width: 300px;
+}
+
+.right input {
+  width: 100%;
+  border: 1.5px solid #d0d3d4;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+.postWrapper {
+  margin: 35px 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.date {
+  padding: 5px 30px;
+  margin: 10px 0;
+}
+
+.message {
+  padding: 5px 30px;
+  margin: 10px 0;
+  text-align: justify;
+  line-height: 25px;
+}
+
+.message::first-letter {
+  text-transform: uppercase;
+}
+
+.rotate {
+  transform: rotate(-180deg);
+}
