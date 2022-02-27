@@ -8,7 +8,7 @@ function ErrorNotification({ loginError, time = 3000 }) {
     if (loginError) setDisplay(true);
 
     setTimeout(() => setDisplay(false), time);
-  }, [loginError]);
+  }, [loginError, time]);
   return (
     <div className={`${nt.container} ${display ? nt.show : nt.hide}`}>
       {loginError}
